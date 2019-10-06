@@ -5,12 +5,12 @@ global screen_size
 global background_colour
 global fruit
 global score
+global scoreboard_size
 
 # Snake head class and snake movement
 class Snake:
     def __init__(self, size=10, colour=(110, 235, 52)):
         self.size = size
-        self.length = size
         self.snake = None
         self.pos = [0, 0]
         self.colour = colour
@@ -20,11 +20,11 @@ class Snake:
         self.endCond = False
 
     def starter(self):
-        self.snake = pygame.draw.rect(screen, self.colour, pygame.Rect(self.pos[0], self.pos[1], self.length, self.size)) # x, y, width_x, height_y
+        self.snake = pygame.draw.rect(screen, self.colour, pygame.Rect(self.pos[0], self.pos[1], self.size, self.size)) # x, y, width_x, height_y
 
     def move(self):
         self.oldpos = self.pos[:]  # Remember last move
-        pygame.draw.rect(screen, background_colour, pygame.Rect(self.pos[0], self.pos[1], self.length, self.size)) # x, y, width_x, height_y
+        pygame.draw.rect(screen, background_colour, pygame.Rect(self.pos[0], self.pos[1], self.size, self.size)) # x, y, width_x, height_y
 
         key_dict = pygame.key.get_pressed()
         if key_dict[pygame.K_DOWN] == 1: # If down position pressed
@@ -124,6 +124,14 @@ class Fruit:
         self.fruit = pygame.draw.rect(screen, (255, 0, 0), pygame.Rect(self.x, self.y, 10, 10))
         return [self.x, self.y] # return fruit position
 
+def update_score():
+    pygame.draw.rect(screen, background_colour, pygame.Rect(0, screen_size, 400, 30))
+    # Scoreboard rendering
+    f = pygame.font.Font('freesansbold.ttf', 30)
+    text = f.render("{:08d}".format(score), True, (255,255,255))
+    textRect = text.get_rect()
+    textRect.center = (screen_size // 2, screen_size + scoreboard_size//2)
+    screen.blit(text, textRect)
 
 # Event Loop, Fruit and Snake handling
 def main():
@@ -150,17 +158,19 @@ def main():
                 # Code for wasd movement
                 done = s.move()   # Collision check
                 fruit_counter = s.fc
-            
-            # print(fruit_counter, s.fruit_counter)
+            update_score(   )
         pygame.display.flip() # required in order for any updates that you make to the game screen to become visible
     print("Your score was: {:}".format(score))
 
 if __name__ == '__main__':
+    pygame.init() # initializes all the modules required for PyGame
+    # Set up
     score = 0
+    scoreboard_size = 30
     screen_size = 400
     background_colour = [0,0,0]
-    pygame.init() # initializes all the modules required for PyGame
-    screen = pygame.display.set_mode((screen_size, screen_size + 30)) # Display screen size setting, width : height
+    screen = pygame.display.set_mode((screen_size, screen_size + scoreboard_size)) # Display screen size setting, width : height
+    # Extra added on to screen for scoreboard
     screen.fill(background_colour)  # Set background colour
-    scoreboard = pygame.draw.rect(screen, (255,255,255), pygame.Rect(0, screen_size, 400, 30))
+    update_score()  # Set up scoreboard
     main()

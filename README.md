@@ -1,7 +1,7 @@
 Python-Snake-Game
 
 - Script is run using python 3.6.8.
-- To run from command-line simplytype "python3 snake.py".
+- To run from command-line simply type "python3 snake.py".
 - The game was wrote using pygame 1.9.6. For more information on pygame and it's capabilities, please visit https://www.pygame.org.
 
 Controls
